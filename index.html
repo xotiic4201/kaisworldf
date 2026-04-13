@@ -1,0 +1,2818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAICORE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   KAICORE — CSS DESIGN SYSTEM
+   ═══════════════════════════════════════════════ */
+:root {
+  --primary: #FF69B4;
+  --secondary: #A855F7;
+  --accent: #FFFFFF;
+  --bg: #0d0d0d;
+  --surface: #1a1a2e;
+  --surface2: #16213e;
+  --text: #ffe4f0;
+  --text-muted: #b08cb0;
+  --gloss: 80;
+  --radius: 20px;
+  --bubble-size: 100%;
+  --scanline: 0;
+  --pet-freq: 50;
+  --font-display: 'Fredoka One', cursive;
+  --font-body: 'Nunito', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --glow: 0 0 20px var(--primary), 0 0 40px var(--secondary);
+  --card-bg: rgba(255,105,180,0.08);
+  --card-border: rgba(255,105,180,0.25);
+  --card-shadow: 0 8px 32px rgba(168,85,247,0.2), 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* Scanlines effect */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,calc(var(--scanline) * 0.01)) 2px,
+    rgba(0,0,0,calc(var(--scanline) * 0.01)) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+/* ── Typography ── */
+h1,h2,h3 { font-family: var(--font-display); }
+
+.font-mono { font-family: var(--font-mono); }
+
+/* ── Glossy Card ── */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,calc(var(--gloss) * 0.008)), transparent);
+}
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(255,255,255,calc(var(--gloss) * 0.003)) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* ── Glossy Button ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(255,105,180,0.4);
+  letter-spacing: 0.5px;
+}
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50px 50px 0 0;
+}
+.btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 25px rgba(255,105,180,0.6);
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-ghost {
+  background: transparent;
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+  box-shadow: none;
+}
+.btn-ghost:hover { background: rgba(255,105,180,0.1); }
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  box-shadow: 0 4px 15px rgba(239,68,68,0.4);
+}
+
+.btn-sm { padding: 6px 14px; font-size: 0.78rem; }
+.btn-xs { padding: 4px 10px; font-size: 0.7rem; }
+
+/* ── Input ── */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid var(--card-border);
+  border-radius: calc(var(--radius) * 0.6);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255,105,180,0.15);
+}
+.input::placeholder { color: var(--text-muted); }
+
+textarea.input { resize: vertical; min-height: 80px; }
+
+/* ── Tag/Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+/* ── Page Layout ── */
+#app { min-height: 100vh; }
+
+.page { display: none; padding: 20px; max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
+.page.active { display: block; }
+
+/* ── Navbar ── */
+#navbar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 10px 16px;
+  background: rgba(13,13,13,0.9);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 12px;
+  transition: all 0.2s;
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.nav-item svg { width: 22px; height: 22px; }
+.nav-item:hover, .nav-item.active {
+  color: var(--primary);
+  background: rgba(255,105,180,0.1);
+}
+
+/* ── Top Bar ── */
+#topbar {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  padding: 14px 20px;
+  background: rgba(13,13,13,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#topbar .logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+.topbar-right { display: flex; gap: 10px; align-items: center; }
+
+/* ── Entry Gate ── */
+#gate {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: radial-gradient(ellipse at center, #1a0a2e 0%, #0d0d1a 60%, #050510 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.bokeh-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bokeh {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: floatBokeh 8s ease-in-out infinite;
+}
+@keyframes floatBokeh {
+  0%,100% { transform: translateY(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-30px) scale(1.1); opacity: 0.7; }
+}
+
+.gate-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  background: linear-gradient(135deg, #FF69B4, #A855F7, #FF69B4);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+  text-align: center;
+  letter-spacing: 2px;
+}
+@keyframes shimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.gate-subtitle {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  font-style: italic;
+  max-width: 300px;
+}
+
+.gate-scene {
+  position: relative;
+  width: 300px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Book */
+.book {
+  width: 160px;
+  height: 200px;
+  position: relative;
+  cursor: default;
+  transform-style: preserve-3d;
+  animation: bookFloat 4s ease-in-out infinite;
+}
+@keyframes bookFloat {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-15px) rotate(2deg); }
+}
+
+.book-body {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #2d0a4e, #4a0072);
+  border-radius: 4px 16px 16px 4px;
+  border: 2px solid rgba(255,105,180,0.4);
+  box-shadow: -8px 8px 30px rgba(0,0,0,0.6), inset 0 0 30px rgba(168,85,247,0.2),
+              0 0 40px rgba(168,85,247,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.book-body::before {
+  content: '';
+  position: absolute;
+  left: 10px; top: 0; bottom: 0;
+  width: 8px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.5), transparent);
+  border-radius: 4px 0 0 4px;
+}
+.book-body::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
+}
+.book-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: #ffccee;
+  text-align: center;
+  text-shadow: 0 0 10px var(--primary);
+  z-index: 1;
+  line-height: 1.2;
+}
+.book-lock {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #ffd700, #ffaa00);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  box-shadow: 0 4px 15px rgba(255,170,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+  z-index: 1;
+  transition: all 0.3s;
+  cursor: pointer;
+  position: relative;
+}
+.book-lock.drop-target {
+  box-shadow: 0 0 20px rgba(255,255,255,0.8), 0 4px 15px rgba(255,170,0,0.8);
+  transform: scale(1.1);
+}
+.book-lock.unlocked {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow: 0 0 30px rgba(34,197,94,0.8);
+  animation: unlockPulse 0.5s ease;
+}
+@keyframes unlockPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* Key */
+.key-container {
+  position: absolute;
+  right: -20px;
+  top: 40px;
+  cursor: grab;
+  animation: keyFloat 3s ease-in-out infinite 1s;
+  user-select: none;
+  z-index: 10;
+}
+.key-container:active { cursor: grabbing; }
+.key-container.dragging { animation: none; cursor: grabbing; opacity: 0.8; }
+@keyframes keyFloat {
+  0%,100% { transform: translateY(0) rotate(15deg); }
+  50% { transform: translateY(-12px) rotate(20deg); }
+}
+.key-emoji {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 4px 10px rgba(255,215,0,0.6));
+}
+
+/* Book open animation */
+.book.opening {
+  animation: bookOpen 1.5s ease forwards;
+}
+@keyframes bookOpen {
+  0% { transform: translateY(-10px) rotate(-2deg) scale(1); }
+  30% { transform: translateY(-10px) rotate(-2deg) scale(1.05); }
+  100% { transform: translateY(-10px) rotateY(20deg) scale(1.1) translateX(-20px); opacity: 0; }
+}
+
+.gate-hint {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  text-align: center;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+#gate.fade-out {
+  animation: gateFadeOut 0.8s ease forwards;
+}
+@keyframes gateFadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.05); }
+}
+
+/* Page pages flip effect */
+.page-flip {
+  position: absolute;
+  width: 120px;
+  height: 160px;
+  right: 0;
+  top: 20px;
+  transform-origin: left center;
+  display: none;
+}
+.page-flip.flipping {
+  display: block;
+  animation: flipPage 0.4s ease forwards;
+}
+@keyframes flipPage {
+  0% { transform: rotateY(0); background: #e0c8f0; opacity: 0.9; }
+  100% { transform: rotateY(-170deg); opacity: 0; }
+}
+
+/* ── Thread Card ── */
+.thread-card {
+  padding: 18px;
+  margin-bottom: 16px;
+  transition: transform 0.2s;
+}
+.thread-card:hover { transform: translateY(-2px); }
+
+.thread-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.thread-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(255,105,180,0.4);
+}
+.thread-meta { flex: 1; }
+.thread-username { font-weight: 800; font-size: 0.85rem; color: var(--primary); }
+.thread-time { font-size: 0.72rem; color: var(--text-muted); }
+.thread-content { font-size: 0.9rem; line-height: 1.6; margin-bottom: 14px; white-space: pre-wrap; }
+.thread-image {
+  width: 100%; border-radius: calc(var(--radius) * 0.7);
+  margin-bottom: 12px; max-height: 400px; object-fit: cover;
+}
+.thread-video { margin-bottom: 12px; border-radius: calc(var(--radius) * 0.7); overflow: hidden; }
+.thread-video iframe { width: 100%; height: 220px; border: none; border-radius: calc(var(--radius) * 0.7); }
+.thread-actions {
+  display: flex; align-items: center; gap: 12px;
+  border-top: 1px solid var(--card-border);
+  padding-top: 12px;
+}
+.thread-action {
+  display: flex; align-items: center; gap: 5px;
+  color: var(--text-muted); font-size: 0.8rem; font-weight: 700;
+  cursor: pointer; transition: color 0.2s;
+  padding: 5px 10px; border-radius: 20px;
+}
+.thread-action:hover { color: var(--primary); background: rgba(255,105,180,0.1); }
+
+/* ── Comments ── */
+.comments-section { margin-top: 16px; }
+.comment-bubble {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  animation: commentPop 0.3s ease;
+}
+@keyframes commentPop {
+  0% { transform: scale(0.9) translateY(10px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+.comment-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 800; color: #fff;
+}
+.comment-content {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 0 calc(var(--radius)*0.8) calc(var(--radius)*0.8) calc(var(--radius)*0.8);
+  padding: 10px 14px;
+  flex: 1;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.comment-author { font-weight: 800; font-size: 0.75rem; margin-bottom: 3px; }
+.comment-text { color: var(--text); }
+.comment-actions { display: flex; gap: 10px; margin-top: 5px; }
+.comment-vote {
+  font-size: 0.7rem; color: var(--text-muted);
+  cursor: pointer; display: flex; align-items: center; gap: 3px;
+  transition: color 0.2s;
+}
+.comment-vote:hover { color: var(--primary); }
+.comment-pinned { border-color: var(--primary) !important; }
+.comment-pinned .comment-author::after { content: ' 📌'; }
+
+.reply-bubble { margin-left: 38px; }
+
+.comment-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  align-items: flex-end;
+}
+.comment-form-inner { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.comment-meta-row { display: flex; gap: 8px; align-items: center; }
+.color-dot-picker {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  appearance: none;
+  background: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ── About Page ── */
+.profile-cover {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: block;
+}
+.profile-pic-wrap {
+  position: relative;
+  margin-top: -50px;
+  margin-left: 20px;
+  display: inline-block;
+}
+.profile-pic {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  border: 4px solid var(--bg);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+  box-shadow: 0 0 20px rgba(255,105,180,0.5);
+  overflow: hidden;
+}
+.profile-pic img { width: 100%; height: 100%; object-fit: cover; }
+.mood-badge {
+  position: absolute;
+  bottom: 2px; right: -5px;
+  width: 28px; height: 28px;
+  background: var(--bg);
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+}
+
+.facts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+.fact-item {
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--card-border);
+  border-radius: calc(var(--radius)*0.7);
+}
+.fact-label { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.fact-value { font-size: 0.85rem; font-weight: 700; margin-top: 3px; }
+
+/* ── Core Links ── */
+.link-pill {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  border-radius: 50px;
+  margin-bottom: 14px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.link-pill::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50px 50px 0 0;
+}
+.link-pill:hover { transform: translateY(-3px) scale(1.02); }
+.link-pill-instagram { background: linear-gradient(135deg, #f093fb, #f5576c, #4facfe); box-shadow: 0 6px 20px rgba(240,147,251,0.4); }
+.link-pill-tiktok { background: linear-gradient(135deg, #010101, #69C9D0, #EE1D52); box-shadow: 0 6px 20px rgba(105,201,208,0.4); }
+.link-pill-spotify { background: linear-gradient(135deg, #1DB954, #0a7a35); box-shadow: 0 6px 20px rgba(29,185,84,0.4); }
+.link-icon { font-size: 1.8rem; }
+
+/* ── Petscape ── */
+#pet-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+.pixel-pet {
+  position: fixed;
+  pointer-events: all;
+  cursor: pointer;
+  image-rendering: pixelated;
+  transition: filter 0.2s;
+  z-index: 51;
+  user-select: none;
+}
+.pixel-pet:hover { filter: brightness(1.3) drop-shadow(0 0 6px var(--primary)); }
+
+/* ── Pet Toggle ── */
+#pet-toggle {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 150;
+  background: rgba(13,13,13,0.85);
+  border: 1px solid var(--card-border);
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  color: var(--primary);
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
+}
+#pet-toggle:hover { background: rgba(255,105,180,0.1); }
+
+/* ── Mute button ── */
+#mute-btn {
+  position: fixed;
+  top: 16px;
+  right: 60px;
+  z-index: 150;
+  background: rgba(13,13,13,0.85);
+  border: 1px solid var(--card-border);
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
+}
+
+/* ── Vlog ── */
+.vlog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 500px) { .vlog-grid { grid-template-columns: 1fr; } }
+.vlog-card { cursor: pointer; transition: transform 0.2s; }
+.vlog-card:hover { transform: translateY(-4px); }
+.vlog-thumb {
+  width: 100%; aspect-ratio: 16/9;
+  background: linear-gradient(135deg, var(--surface), var(--surface2));
+  border-radius: calc(var(--radius)*0.7) calc(var(--radius)*0.7) 0 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.vlog-thumb img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.vlog-play {
+  position: absolute;
+  width: 44px; height: 44px;
+  background: rgba(255,105,180,0.85);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(255,105,180,0.5);
+  z-index: 1;
+}
+.vlog-info { padding: 12px 14px; }
+.vlog-title { font-size: 0.85rem; font-weight: 800; margin-bottom: 4px; }
+.vlog-date { font-size: 0.72rem; color: var(--text-muted); }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  animation: modalFadeIn 0.2s ease;
+}
+@keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-box {
+  width: 100%; max-width: 600px; max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+  animation: modalSlide 0.3s ease;
+}
+@keyframes modalSlide { from { transform: translateY(20px) scale(0.97); } to { transform: translateY(0) scale(1); } }
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--card-border);
+}
+.modal-body { padding: 20px; }
+.modal-close { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
+
+/* ── Journal ── */
+.journal-locked {
+  text-align: center;
+  padding: 60px 20px;
+}
+.journal-cat { font-size: 4rem; display: block; margin-bottom: 16px; }
+.journal-entry { padding: 16px; margin-bottom: 12px; }
+.journal-entry-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.journal-date { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); }
+.journal-mood { font-size: 1.2rem; }
+.journal-title { font-size: 0.9rem; font-weight: 800; margin-bottom: 6px; }
+.journal-preview { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+/* ── On This Day ── */
+.flashback-card {
+  padding: 18px;
+  margin-bottom: 16px;
+  border-left: 3px solid var(--primary);
+  position: relative;
+}
+.flashback-year {
+  position: absolute;
+  top: -10px; left: 14px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 0.7rem; font-weight: 800; color: #fff;
+}
+
+/* ── Edit View ── */
+.edit-section { margin-bottom: 28px; }
+.edit-section-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 8px;
+}
+.edit-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: flex-end; }
+.edit-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; }
+
+.admin-thread-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px; border-radius: calc(var(--radius)*0.7);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--card-border);
+  margin-bottom: 8px;
+}
+.admin-thread-text { flex: 1; font-size: 0.82rem; line-height: 1.4; }
+.admin-thread-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+/* Color picker row */
+.color-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.color-swatch {
+  width: 36px; height: 36px; border-radius: 50%;
+  cursor: pointer; border: 3px solid transparent;
+  transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.color-swatch.active { border-color: #fff; transform: scale(1.2); }
+
+.slider-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.slider-label { font-size: 0.78rem; color: var(--text-muted); width: 130px; flex-shrink: 0; }
+.slider-val { font-size: 0.78rem; color: var(--primary); font-weight: 800; width: 35px; text-align: right; }
+input[type="range"] {
+  flex: 1; accent-color: var(--primary);
+  height: 4px; cursor: pointer;
+}
+
+/* Pet creator */
+#pet-grid {
+  display: grid;
+  grid-template-columns: repeat(32, 1fr);
+  gap: 1px;
+  background: #111;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 1;
+  max-width: 400px;
+  margin: 0 auto;
+  cursor: crosshair;
+}
+.pet-pixel {
+  aspect-ratio: 1;
+  background: transparent;
+  transition: background 0.05s;
+}
+.pet-pixel:hover { opacity: 0.8; }
+
+/* ── Petscape Page ── */
+.petscape-vibes {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; margin-top: 20px;
+}
+.pet-vibe-card {
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.pet-vibe-card:hover { transform: scale(1.05); }
+.pet-sprite-large { font-size: 3rem; display: block; margin-bottom: 8px; image-rendering: pixelated; }
+.pet-name { font-size: 0.8rem; font-weight: 800; color: var(--primary); }
+.pet-personality { font-size: 0.7rem; color: var(--text-muted); }
+
+/* ── Loading ── */
+.loading {
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px; color: var(--text-muted); font-size: 0.85rem;
+  gap: 10px;
+}
+.loading::before {
+  content: '';
+  width: 20px; height: 20px;
+  border: 2px solid var(--card-border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Empty State ── */
+.empty-state {
+  text-align: center; padding: 50px 20px;
+  color: var(--text-muted);
+}
+.empty-state .empty-emoji { font-size: 3rem; display: block; margin-bottom: 12px; }
+
+/* ── Page Headers ── */
+.page-header {
+  margin-bottom: 24px;
+  padding: 20px 0 16px;
+  border-bottom: 1px solid var(--card-border);
+}
+.page-header h1 {
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.page-header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
+
+/* ── Toast ── */
+#toast {
+  position: fixed;
+  bottom: 90px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff; padding: 10px 22px;
+  border-radius: 50px;
+  font-size: 0.82rem; font-weight: 800;
+  z-index: 1000;
+  opacity: 0;
+  transition: all 0.3s;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(255,105,180,0.5);
+}
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Secret Login ── */
+.login-page {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.login-box { width: 100%; max-width: 340px; padding: 32px; }
+.login-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+.login-sub { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 24px; }
+
+/* ── Easter eggs ── */
+@keyframes rainbow-gloss {
+  0% { filter: hue-rotate(0deg) brightness(1.2); }
+  100% { filter: hue-rotate(360deg) brightness(1.2); }
+}
+.rainbow-mode { animation: rainbow-gloss 1s linear infinite; }
+
+.stampede-pet {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  font-size: 1.5rem;
+  animation: stampede 2s linear forwards;
+}
+@keyframes stampede {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(110vw); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .facts-grid { grid-template-columns: 1fr; }
+  .petscape-vibes { grid-template-columns: repeat(2, 1fr); }
+  #navbar { padding: 8px 10px; }
+  .nav-item { padding: 4px 6px; font-size: 0.58rem; }
+}
+
+/* ── Theme presets ── */
+.preset-btn {
+  padding: 10px 16px;
+  border-radius: calc(var(--radius)*0.6);
+  border: 1.5px solid var(--card-border);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  font-size: 0.78rem; font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-body);
+}
+.preset-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+/* hide scrollbar in modal */
+.modal-box::-webkit-scrollbar { width: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ ENTRY GATE ═══════════════════════════════════ -->
+<div id="gate">
+  <div class="bokeh-container" id="bokeh"></div>
+  <div class="gate-title">✦ KAICORE ✦</div>
+  <div class="gate-subtitle">a glossy hellscape of hyperreal pixel pets and Kai's random thoughts</div>
+
+  <div class="gate-scene">
+    <!-- Book -->
+    <div class="book" id="gate-book">
+      <div class="book-body">
+        <div class="book-title">Kaiana's<br>World</div>
+        <div class="book-lock" id="book-lock" title="Drop key here">🔒</div>
+        <div class="page-flip" id="page-flip"></div>
+      </div>
+    </div>
+    <!-- Key -->
+    <div class="key-container" id="key" draggable="true">
+      <div class="key-emoji">🗝️</div>
+    </div>
+  </div>
+
+  <div class="gate-hint" id="gate-hint">✨ drag the key to the lock ✨</div>
+  <div style="color: var(--text-muted); font-size: 0.7rem; margin-top: -10px; opacity: 0.6;">(mobile: tap key, then tap lock)</div>
+</div>
+
+<!-- ═══════════════════════════════════ MAIN APP ═══════════════════════════════════ -->
+<div id="app" style="display:none;">
+
+  <!-- Floating Controls -->
+  <div id="pet-toggle">🐾 PETS ON</div>
+  <div id="mute-btn">🔊</div>
+  <div id="toast"></div>
+
+  <!-- Top Bar -->
+  <div id="topbar">
+    <div class="logo" id="logo-click" onclick="navigate('home')">✦ KAICORE</div>
+    <div class="topbar-right" id="topbar-right"></div>
+  </div>
+
+  <!-- ── HOME PAGE ── -->
+  <div class="page active" id="page-home">
+    <div style="padding-top:20px;">
+      <div style="text-align:center; padding: 30px 0 24px;">
+        <div style="font-family:var(--font-display); font-size:clamp(2.5rem,8vw,4rem); background:linear-gradient(135deg,var(--primary),var(--secondary),var(--primary)); background-size:200% auto; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:shimmer 3s linear infinite; letter-spacing:2px;">KAICORE</div>
+        <div style="color:var(--text-muted); font-size:0.82rem; margin-top:6px; font-style:italic;">a glossy hellscape of hyperreal pixel pets</div>
+        <div id="home-mood-display" style="margin-top:14px; display:inline-flex; align-items:center; gap:8px;"><span class="badge">🎀 mood of the day</span></div>
+      </div>
+      <div id="home-threads-preview"></div>
+      <div style="text-align:center; margin-top:10px;">
+        <button class="btn" onclick="navigate('threads')">✦ view all threads</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── THREADS PAGE ── -->
+  <div class="page" id="page-threads">
+    <div class="page-header">
+      <h1>THREADS</h1>
+      <p>Kai's random thoughts & chaotic observations</p>
+    </div>
+    <div id="threads-container"><div class="loading">Loading threads...</div></div>
+    <div id="threads-pagination" style="text-align:center; margin-top:16px;"></div>
+  </div>
+
+  <!-- ── VLOG PAGE ── -->
+  <div class="page" id="page-vlog">
+    <div class="page-header">
+      <h1>VLOG</h1>
+      <p>Video diary entries from Kai's world</p>
+    </div>
+    <div id="vlogs-container" class="vlog-grid"><div class="loading" style="grid-column:1/-1;">Loading vlogs...</div></div>
+  </div>
+
+  <!-- ── ABOUT PAGE ── -->
+  <div class="page" id="page-about">
+    <div class="page-header"><h1>ABOUT KAI</h1></div>
+    <div class="card" id="about-card">
+      <div style="background:linear-gradient(135deg,var(--primary),var(--secondary)); height:160px; border-radius:var(--radius) var(--radius) 0 0;" id="cover-banner"></div>
+      <div style="padding:0 20px 20px;">
+        <div class="profile-pic-wrap">
+          <div class="profile-pic" id="profile-pic-el">🌸</div>
+          <div class="mood-badge" id="mood-badge-el">🎀</div>
+        </div>
+        <div style="margin-top:12px;">
+          <div style="font-family:var(--font-display); font-size:1.6rem;" id="profile-name">Kaiana</div>
+          <div style="color:var(--text-muted); font-size:0.82rem;" id="profile-pronouns">she/her</div>
+        </div>
+        <div id="profile-details" style="display:flex; gap:16px; margin-top:12px; flex-wrap:wrap;"></div>
+        <div id="about-bio" style="margin-top:14px; font-size:0.88rem; line-height:1.6; color:var(--text-muted);"></div>
+        <div style="margin-top:20px;">
+          <div style="font-family:var(--font-display); font-size:1rem; color:var(--primary); margin-bottom:10px;">FUN FACTS</div>
+          <div class="facts-grid" id="facts-grid"></div>
+        </div>
+        <div id="spotify-section" style="margin-top:20px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CORE LINKS PAGE ── -->
+  <div class="page" id="page-corelinks">
+    <div class="page-header"><h1>CORE.LINKS</h1><p>Only the essentials</p></div>
+    <div style="max-width:380px; margin:0 auto;" id="links-container"></div>
+  </div>
+
+  <!-- ── PETSCAPE PAGE ── -->
+  <div class="page" id="page-petscape">
+    <div class="page-header"><h1>PETSCAPE</h1><p>They live here. This is their home now.</p></div>
+    <div style="text-align:center; margin-bottom:20px;">
+      <div style="font-size:0.85rem; color:var(--text-muted);">click a pet to hear it 🔊</div>
+    </div>
+    <div class="petscape-vibes" id="petscape-grid"></div>
+    <div style="margin-top:30px; padding:20px; text-align:center; background:rgba(255,105,180,0.05); border-radius:var(--radius); border:1px dashed var(--card-border);">
+      <div style="font-size:2rem; margin-bottom:8px;">✨</div>
+      <div style="font-size:0.82rem; color:var(--text-muted);">Rare pets appear here. Check back often...</div>
+    </div>
+  </div>
+
+  <!-- ── PET CREATOR PAGE ── -->
+  <div class="page" id="page-petcreator">
+    <div class="page-header"><h1>PET CREATOR</h1><p>Design your own pixel companion</p></div>
+    <div id="pet-creator-locked" style="display:none;">
+      <div class="empty-state"><span class="empty-emoji">🔒</span><p>Pet Creator is for Kai only</p></div>
+    </div>
+    <div id="pet-creator-ui">
+      <div style="display:flex; gap:16px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:280px;">
+          <div class="edit-section-title">🎨 Canvas (32x32)</div>
+          <div id="pet-grid"></div>
+          <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+            <button class="btn btn-sm" id="tool-pencil" onclick="setTool('pencil')">✏️ Draw</button>
+            <button class="btn btn-sm btn-ghost" id="tool-fill" onclick="setTool('fill')">🪣 Fill</button>
+            <button class="btn btn-sm btn-ghost" id="tool-eraser" onclick="setTool('eraser')">🧹 Erase</button>
+            <button class="btn btn-sm btn-danger" onclick="clearPetGrid()">🗑️ Clear</button>
+          </div>
+        </div>
+        <div style="flex:1; min-width:240px;">
+          <div class="edit-section-title">🎨 Colors</div>
+          <div class="color-grid" id="pet-color-palette"></div>
+          <div style="margin-top:10px;">
+            <input type="color" class="input" id="custom-color" value="#FF69B4" style="height:40px; padding:2px 6px; cursor:pointer;">
+          </div>
+          <div class="edit-section-title" style="margin-top:16px;">⚙️ Behavior</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div><div class="edit-label">Pet Name</div><input class="input" id="new-pet-name" placeholder="fluffy..."></div>
+            <div><div class="edit-label">Type</div>
+              <select class="input" id="new-pet-type">
+                <option value="cat">Cat</option><option value="bird">Bird</option>
+                <option value="bat">Bat</option><option value="custom">Custom</option>
+              </select>
+            </div>
+            <div><div class="edit-label">Movement</div>
+              <select class="input" id="new-pet-movement">
+                <option value="ground">Ground Walker</option>
+                <option value="air">Flyer</option>
+                <option value="both">Both</option>
+              </select>
+            </div>
+            <div><div class="edit-label">Personality</div>
+              <select class="input" id="new-pet-personality">
+                <option value="playful">Playful</option><option value="sleepy">Sleepy</option>
+                <option value="chaotic">Chaotic</option><option value="shy">Shy</option>
+              </select>
+            </div>
+            <button class="btn" onclick="savePet()">💾 Save Pet</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── JOURNAL PAGE ── -->
+  <div class="page" id="page-journal">
+    <div class="page-header"><h1>PRIVATE JOURNAL</h1><p>Just for Kai 🔐</p></div>
+    <div id="journal-locked">
+      <div class="journal-locked">
+        <span class="journal-cat">🐱</span>
+        <p style="font-family:var(--font-display); font-size:1.4rem; color:var(--primary); margin-bottom:8px;">secret diary</p>
+        <p style="color:var(--text-muted); font-size:0.82rem; margin-bottom:20px;">enter your password to continue</p>
+        <div style="max-width:280px; margin:0 auto; display:flex; flex-direction:column; gap:10px;">
+          <input class="input" type="password" id="journal-pw-input" placeholder="password..." onkeydown="if(event.key==='Enter') checkJournalPw()">
+          <button class="btn" onclick="checkJournalPw()">🔓 Enter</button>
+        </div>
+        <div id="journal-pw-error" style="color:#ef4444; font-size:0.78rem; margin-top:10px; display:none;">nice try! 🐱</div>
+      </div>
+    </div>
+    <div id="journal-unlocked" style="display:none;">
+      <div id="journal-new-entry-section" style="display:none; margin-bottom:20px;">
+        <div class="card" style="padding:18px;">
+          <div style="font-family:var(--font-display); color:var(--primary); margin-bottom:14px;">New Entry</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <input class="input" type="date" id="j-date">
+            <input class="input" type="text" id="j-title" placeholder="Entry title...">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <span style="cursor:pointer; font-size:1.3rem;" onclick="setJournalMood('😊')" title="happy">😊</span>
+              <span style="cursor:pointer; font-size:1.3rem;" onclick="setJournalMood('🔥')" title="on fire">🔥</span>
+              <span style="cursor:pointer; font-size:1.3rem;" onclick="setJournalMood('😴')" title="tired">😴</span>
+              <span style="cursor:pointer; font-size:1.3rem;" onclick="setJournalMood('🤪')" title="chaotic">🤪</span>
+              <span style="cursor:pointer; font-size:1.3rem;" onclick="setJournalMood('🩸')" title="dark">🩸</span>
+              <span style="cursor:pointer; font-size:1.3rem;" onclick="setJournalMood('🎀')" title="girly">🎀</span>
+              <span style="cursor:pointer; font-size:1.3rem;" onclick="setJournalMood('🖤')" title="void">🖤</span>
+              <span style="cursor:pointer; font-size:1.3rem;" onclick="setJournalMood('💛')" title="golden">💛</span>
+            </div>
+            <div id="j-mood-display" style="font-size:0.78rem; color:var(--text-muted);">mood: none selected</div>
+            <textarea class="input" id="j-content" rows="6" placeholder="write freely..."></textarea>
+            <div style="display:flex; gap:8px;">
+              <button class="btn" onclick="saveJournalEntry()">💾 Save Entry</button>
+              <button class="btn btn-ghost" onclick="document.getElementById('journal-new-entry-section').style.display='none'">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn" style="margin-bottom:16px;" onclick="document.getElementById('journal-new-entry-section').style.display='block'; document.getElementById('j-date').value=new Date().toISOString().split('T')[0];">✦ New Entry</button>
+      <div id="journal-entries-list"></div>
+    </div>
+  </div>
+
+  <!-- ── ON THIS DAY ── -->
+  <div class="page" id="page-onthisday">
+    <div class="page-header">
+      <h1>ON THIS DAY</h1>
+      <p>📅 time capsule from KAICORE history</p>
+    </div>
+    <div id="onthisday-container"><div class="loading">Loading memories...</div></div>
+  </div>
+
+  <!-- ── SECRET LOGIN ── -->
+  <div class="page" id="page-kai">
+    <div class="login-page">
+      <div class="card login-box">
+        <div class="login-title">✦ KAI</div>
+        <div class="login-sub">this is not for you 🐱</div>
+        <div id="login-form" style="display:flex; flex-direction:column; gap:12px;">
+          <input class="input" type="text" id="login-user" placeholder="username" autocomplete="off">
+          <input class="input" type="password" id="login-pass" placeholder="password" onkeydown="if(event.key==='Enter') doLogin()">
+          <button class="btn" onclick="doLogin()">✨ enter</button>
+          <div id="login-error" style="color:#ef4444; font-size:0.78rem; text-align:center; display:none;"></div>
+        </div>
+        <div id="post-login-buttons" style="display:none; flex-direction:column; gap:10px; text-align:center;">
+          <div style="color:var(--text-muted); font-size:0.8rem; margin-bottom:6px;">welcome back 🎀</div>
+          <button class="btn" onclick="navigate('edit')">✏️ EDIT VIEW</button>
+          <button class="btn btn-ghost" onclick="navigate('home')">👁️ USER VIEW</button>
+          <button class="btn btn-danger btn-sm" onclick="doLogout()">logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EDIT VIEW ── -->
+  <div class="page" id="page-edit">
+    <div class="page-header"><h1>EDIT VIEW</h1><p>Kai's admin panel 🎀</p></div>
+    <div id="edit-locked" style="display:none;">
+      <div class="empty-state"><span class="empty-emoji">🔒</span><p>You need to be logged in as Kai</p><br><button class="btn" onclick="navigate('kai')">Login</button></div>
+    </div>
+    <div id="edit-panel" style="display:none;">
+
+      <!-- New Thread -->
+      <div class="edit-section">
+        <div class="edit-section-title">🧵 New Thread</div>
+        <div class="card" style="padding:16px; display:flex; flex-direction:column; gap:10px;">
+          <textarea class="input" id="new-thread-content" rows="3" placeholder="what's on your mind..."></textarea>
+          <input class="input" id="new-thread-image" placeholder="image URL (optional)">
+          <input class="input" id="new-thread-video" placeholder="YouTube/TikTok URL (optional)">
+          <button class="btn" onclick="postThread()">📮 Post Thread</button>
+        </div>
+      </div>
+
+      <!-- New Vlog -->
+      <div class="edit-section">
+        <div class="edit-section-title">🎬 New Vlog</div>
+        <div class="card" style="padding:16px; display:flex; flex-direction:column; gap:10px;">
+          <input class="input" id="new-vlog-title" placeholder="Video title">
+          <textarea class="input" id="new-vlog-desc" rows="2" placeholder="Description..."></textarea>
+          <input class="input" id="new-vlog-url" placeholder="YouTube/TikTok/MP4 URL">
+          <input class="input" id="new-vlog-thumb" placeholder="Thumbnail URL (optional)">
+          <button class="btn" onclick="postVlog()">📤 Upload Vlog</button>
+        </div>
+      </div>
+
+      <!-- Manage Threads -->
+      <div class="edit-section">
+        <div class="edit-section-title">📋 Manage Threads</div>
+        <div id="admin-threads-list"><div class="loading">Loading...</div></div>
+      </div>
+
+      <!-- Profile Editor -->
+      <div class="edit-section">
+        <div class="edit-section-title">👤 Profile Editor</div>
+        <div class="card" style="padding:16px; display:flex; flex-direction:column; gap:10px;">
+          <div><div class="edit-label">Mood of the Day</div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:5px;">
+              <span style="cursor:pointer; font-size:1.5rem;" onclick="setMood('😊')">😊</span>
+              <span style="cursor:pointer; font-size:1.5rem;" onclick="setMood('🔥')">🔥</span>
+              <span style="cursor:pointer; font-size:1.5rem;" onclick="setMood('😴')">😴</span>
+              <span style="cursor:pointer; font-size:1.5rem;" onclick="setMood('🤪')">🤪</span>
+              <span style="cursor:pointer; font-size:1.5rem;" onclick="setMood('🩸')">🩸</span>
+              <span style="cursor:pointer; font-size:1.5rem;" onclick="setMood('🎀')">🎀</span>
+              <span style="cursor:pointer; font-size:1.5rem;" onclick="setMood('🖤')">🖤</span>
+              <span style="cursor:pointer; font-size:1.5rem;" onclick="setMood('💛')">💛</span>
+            </div>
+          </div>
+          <div class="edit-row">
+            <div style="flex:1"><div class="edit-label">Display Name</div><input class="input" id="edit-name" placeholder="Kaiana"></div>
+            <div style="flex:1"><div class="edit-label">Pronouns</div><input class="input" id="edit-pronouns" placeholder="she/her"></div>
+          </div>
+          <div class="edit-row">
+            <div style="flex:1"><div class="edit-label">Location</div><input class="input" id="edit-location" placeholder="🌍"></div>
+            <div style="flex:1"><div class="edit-label">Zodiac</div><input class="input" id="edit-zodiac" placeholder="♈"></div>
+          </div>
+          <div><div class="edit-label">Bio</div><textarea class="input" id="edit-bio" rows="2" placeholder="write something about yourself..."></textarea></div>
+          <div><div class="edit-label">Instagram URL</div><input class="input" id="edit-instagram" placeholder="https://instagram.com/..."></div>
+          <div><div class="edit-label">TikTok URL</div><input class="input" id="edit-tiktok" placeholder="https://tiktok.com/@..."></div>
+          <div><div class="edit-label">Spotify URL</div><input class="input" id="edit-spotify" placeholder="https://open.spotify.com/..."></div>
+          <button class="btn" onclick="saveProfile()">💾 Save Profile</button>
+        </div>
+      </div>
+
+      <!-- Fun Facts Editor -->
+      <div class="edit-section">
+        <div class="edit-section-title">✨ Fun Facts</div>
+        <div class="card" style="padding:16px; display:flex; flex-direction:column; gap:8px;" id="fun-facts-editor"></div>
+      </div>
+
+      <!-- Theme Studio -->
+      <div class="edit-section">
+        <div class="edit-section-title">🎨 Theme Studio</div>
+        <div class="card" style="padding:16px;">
+          <div style="margin-bottom:14px;">
+            <div class="edit-label" style="margin-bottom:8px;">Base Color</div>
+            <div class="color-grid">
+              <div class="color-swatch" style="background:#FF69B4;" onclick="applyColor('#FF69B4','#A855F7')" title="Bubblegum"></div>
+              <div class="color-swatch" style="background:#A855F7;" onclick="applyColor('#A855F7','#FF69B4')" title="Purple Haze"></div>
+              <div class="color-swatch" style="background:#DC2626;" onclick="applyColor('#DC2626','#111111')" title="Blood Red"></div>
+              <div class="color-swatch" style="background:#111111;" onclick="applyColor('#111111','#A855F7')" title="Void"></div>
+              <div class="color-swatch" style="background:#EAB308;" onclick="applyColor('#EAB308','#FFFFFF')" title="Neon Gloss"></div>
+              <div class="color-swatch" style="background:#00BFFF;" onclick="applyColor('#00BFFF','#A855F7')" title="Sky"></div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:8px;">
+              <div style="flex:1"><div class="edit-label">Primary</div><input type="color" class="input" id="color-primary" value="#FF69B4" style="height:36px; padding:2px; cursor:pointer;" oninput="liveUpdateColor()"></div>
+              <div style="flex:1"><div class="edit-label">Secondary</div><input type="color" class="input" id="color-secondary" value="#A855F7" style="height:36px; padding:2px; cursor:pointer;" oninput="liveUpdateColor()"></div>
+            </div>
+          </div>
+          <div class="slider-row"><span class="slider-label">✨ Glossiness</span><input type="range" min="0" max="100" value="80" id="sl-gloss" oninput="liveSlider('gloss',this.value)"><span class="slider-val" id="sv-gloss">80</span></div>
+          <div class="slider-row"><span class="slider-label">⭕ Border Radius</span><input type="range" min="0" max="50" value="20" id="sl-radius" oninput="liveSlider('radius',this.value)"><span class="slider-val" id="sv-radius">20</span></div>
+          <div class="slider-row"><span class="slider-label">📺 Scanlines</span><input type="range" min="0" max="30" value="0" id="sl-scan" oninput="liveSlider('scan',this.value)"><span class="slider-val" id="sv-scan">0</span></div>
+          <div class="slider-row"><span class="slider-label">🐾 Pet Frequency</span><input type="range" min="0" max="100" value="50" id="sl-pets" oninput="liveSlider('pets',this.value)"><span class="slider-val" id="sv-pets">50</span></div>
+          <div style="margin-top:14px;">
+            <div class="edit-label" style="margin-bottom:8px;">Preset Themes</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="preset-btn" onclick="applyPreset('bubblegum')">🍬 Bubblegum</button>
+              <button class="preset-btn" onclick="applyPreset('blood')">🩸 Midnight Blood</button>
+              <button class="preset-btn" onclick="applyPreset('vanilla')">🍦 Vanilla Static</button>
+              <button class="preset-btn" onclick="applyPreset('purple')">🔮 Purple Haze</button>
+            </div>
+          </div>
+          <button class="btn" style="margin-top:14px;" onclick="saveTheme()">💾 Save Theme</button>
+        </div>
+      </div>
+
+      <!-- Logout -->
+      <div class="edit-section" style="text-align:center;">
+        <button class="btn btn-danger" onclick="doLogout()">🚪 Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navbar -->
+  <nav id="navbar">
+    <div class="nav-item active" onclick="navigate('home')" id="nav-home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      HOME
+    </div>
+    <div class="nav-item" onclick="navigate('threads')" id="nav-threads">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      THREADS
+    </div>
+    <div class="nav-item" onclick="navigate('vlog')" id="nav-vlog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+      VLOG
+    </div>
+    <div class="nav-item" onclick="navigate('about')" id="nav-about">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      KAI
+    </div>
+    <div class="nav-item" onclick="navigate('petscape')" id="nav-petscape">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.96-1.45-2.344-2.5M8 14v.5A3.5 3.5 0 0 0 11.5 18h1a3.5 3.5 0 0 0 3.5-3.5V14"/><path d="M6.5 10c0-1 .5-2 1.5-2.5s2-.5 2 0 .5 2.5-.5 3.5S6.5 11 6.5 10zM17.5 10c0-1-.5-2-1.5-2.5s-2-.5-2 0-.5 2.5.5 3.5S17.5 11 17.5 10z"/></svg>
+      PETS
+    </div>
+    <div class="nav-item" onclick="navigate('corelinks')" id="nav-corelinks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      LINKS
+    </div>
+  </nav>
+
+</div><!-- /app -->
+
+<!-- Video Modal -->
+<div id="video-modal" class="modal-overlay" style="display:none;" onclick="closeVideoModal(event)">
+  <div class="modal-box" id="video-modal-box">
+    <div class="modal-header">
+      <div id="modal-title" style="font-family:var(--font-display); color:var(--primary);">Vlog</div>
+      <button class="modal-close" onclick="closeVideoModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="modal-video-container" style="border-radius:calc(var(--radius)*0.7); overflow:hidden; margin-bottom:16px;"></div>
+      <div id="modal-vlog-comments"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+//   KAICORE — JavaScript
+// ═══════════════════════════════════════════════
+
+const API = 'https://your-backend.onrender.com'; // ← update this
+
+// ─── State ─────────────────────────────────────
+const state = {
+  currentPage: 'home',
+  isLoggedIn: false,
+  isKai: false,
+  petsOn: true,
+  muted: false,
+  journalAuthed: false,
+  journalPassword: '',
+  journalMood: '',
+  logoClickCount: 0,
+  activeThread: null,
+  pets: [],
+  theme: {},
+  profile: {},
+  petTool: 'pencil',
+  petColor: '#FF69B4',
+  petGridData: new Array(32*32).fill(''),
+  threadsPage: 1,
+  isDrawing: false
+};
+
+// ─── Audio (Web Audio API) ──────────────────────
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  return audioCtx;
+}
+
+function playTone(freq, type='sine', duration=0.15, vol=0.2) {
+  if (state.muted) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + duration);
+  } catch(e) {}
+}
+
+function playBloop() { playTone(520, 'sine', 0.12, 0.15); }
+function playPop() { playTone(680, 'sine', 0.08, 0.1); }
+function playClink() {
+  playTone(880, 'triangle', 0.1, 0.3);
+  setTimeout(() => playTone(1100, 'triangle', 0.08, 0.2), 80);
+}
+function playChime() {
+  [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => playTone(f, 'sine', 0.25, 0.15), i * 80));
+}
+function playCat() {
+  // mrrp: frequency slide
+  try {
+    if (state.muted) return;
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(400, ctx.currentTime);
+    osc.frequency.linearRampToValueAtTime(600, ctx.currentTime + 0.1);
+    osc.frequency.linearRampToValueAtTime(350, ctx.currentTime + 0.3);
+    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
+  } catch(e) {}
+}
+function playBird() {
+  try {
+    if (state.muted) return;
+    const ctx = getAudioCtx();
+    [0, 0.05, 0.1].forEach(t => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1200 + Math.random()*400, ctx.currentTime + t);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime + t);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.12);
+      osc.start(ctx.currentTime + t); osc.stop(ctx.currentTime + t + 0.15);
+    });
+  } catch(e) {}
+}
+
+// ─── Toast ─────────────────────────────────────
+function toast(msg, duration=2500) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), duration);
+}
+
+// ─── Theme ─────────────────────────────────────
+function applyTheme(t) {
+  const r = document.documentElement.style;
+  if (t.primary_color) r.setProperty('--primary', t.primary_color);
+  if (t.secondary_color) r.setProperty('--secondary', t.secondary_color);
+  if (t.glossiness !== undefined) r.setProperty('--gloss', t.glossiness);
+  if (t.border_radius !== undefined) r.setProperty('--radius', t.border_radius + 'px');
+  if (t.scanline_opacity !== undefined) r.setProperty('--scanline', t.scanline_opacity);
+  if (t.pet_frequency !== undefined) r.setProperty('--pet-freq', t.pet_frequency);
+  if (t.bubble_size !== undefined) r.setProperty('--bubble-size', t.bubble_size + '%');
+}
+
+function liveUpdateColor() {
+  const p = document.getElementById('color-primary').value;
+  const s = document.getElementById('color-secondary').value;
+  applyTheme({ primary_color: p, secondary_color: s });
+  state.theme.primary_color = p;
+  state.theme.secondary_color = s;
+}
+
+function liveSlider(type, val) {
+  val = parseInt(val);
+  const map = {
+    gloss: ['--gloss', 'sv-gloss', 'glossiness'],
+    radius: ['--radius', 'sv-radius', 'border_radius', 'px'],
+    scan: ['--scanline', 'sv-scan', 'scanline_opacity'],
+    pets: ['--pet-freq', 'sv-pets', 'pet_frequency']
+  };
+  const [cssVar, dispId, stateKey, suffix = ''] = map[type];
+  document.documentElement.style.setProperty(cssVar, val + suffix);
+  document.getElementById(dispId).textContent = val;
+  state.theme[stateKey] = val;
+}
+
+function applyColor(p, s) {
+  document.getElementById('color-primary').value = p;
+  document.getElementById('color-secondary').value = s;
+  applyTheme({ primary_color: p, secondary_color: s });
+  state.theme.primary_color = p; state.theme.secondary_color = s;
+  playBloop();
+}
+
+function applyPreset(name) {
+  const presets = {
+    bubblegum: { primary_color: '#FF69B4', secondary_color: '#A855F7', glossiness: 90, border_radius: 30, scanline_opacity: 0 },
+    blood: { primary_color: '#DC2626', secondary_color: '#111111', glossiness: 40, border_radius: 15, scanline_opacity: 5 },
+    vanilla: { primary_color: '#EAB308', secondary_color: '#FFFFFF', glossiness: 60, border_radius: 50, scanline_opacity: 15 },
+    purple: { primary_color: '#A855F7', secondary_color: '#C0C0C0', glossiness: 80, border_radius: 25, scanline_opacity: 0 }
+  };
+  const t = presets[name];
+  if (!t) return;
+  applyTheme(t);
+  Object.assign(state.theme, t);
+  // Update sliders
+  if (t.glossiness !== undefined) { document.getElementById('sl-gloss').value = t.glossiness; document.getElementById('sv-gloss').textContent = t.glossiness; }
+  if (t.border_radius !== undefined) { document.getElementById('sl-radius').value = t.border_radius; document.getElementById('sv-radius').textContent = t.border_radius; }
+  if (t.scanline_opacity !== undefined) { document.getElementById('sl-scan').value = t.scanline_opacity; document.getElementById('sv-scan').textContent = t.scanline_opacity; }
+  if (t.primary_color) document.getElementById('color-primary').value = t.primary_color;
+  if (t.secondary_color) document.getElementById('color-secondary').value = t.secondary_color;
+  playBloop();
+  toast('Theme applied! 🎨');
+}
+
+async function saveTheme() {
+  try {
+    await apiCall('PUT', '/api/theme', state.theme);
+    toast('Theme saved 💾');
+    playChime();
+  } catch(e) { toast('Could not save theme'); }
+}
+
+// ─── API ────────────────────────────────────────
+async function apiCall(method, path, body = null) {
+  const opts = {
+    method,
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API + path, opts);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail || 'API error');
+  }
+  return res.json();
+}
+
+// ─── Navigation ─────────────────────────────────
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const pageEl = document.getElementById('page-' + page);
+  if (!pageEl) return;
+  pageEl.classList.add('active');
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+  state.currentPage = page;
+  window.scrollTo(0, 0);
+  playBloop();
+  onPageLoad(page);
+}
+
+async function onPageLoad(page) {
+  if (page === 'home') loadHomePreview();
+  if (page === 'threads') loadThreads();
+  if (page === 'vlog') loadVlogs();
+  if (page === 'about') loadAbout();
+  if (page === 'corelinks') loadLinks();
+  if (page === 'petscape') renderPetscapePage();
+  if (page === 'onthisday') loadOnThisDay();
+  if (page === 'edit') loadEditView();
+  if (page === 'journal') initJournalPage();
+  if (page === 'kai') checkLoginState();
+}
+
+// ─── Entry Gate ─────────────────────────────────
+function initGate() {
+  // Bokeh
+  const bokeh = document.getElementById('bokeh');
+  const colors = ['rgba(255,105,180,0.3)','rgba(168,85,247,0.25)','rgba(255,255,255,0.1)','rgba(255,100,100,0.2)'];
+  for (let i = 0; i < 12; i++) {
+    const d = document.createElement('div');
+    d.className = 'bokeh';
+    const size = 60 + Math.random() * 120;
+    d.style.cssText = `width:${size}px;height:${size}px;background:${colors[i%colors.length]};left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*5}s;animation-duration:${5+Math.random()*6}s;`;
+    bokeh.appendChild(d);
+  }
+
+  // Check session
+  if (sessionStorage.getItem('kaicore_unlocked')) {
+    unlockGate(false);
+    return;
+  }
+
+  // Drag-to-unlock
+  const key = document.getElementById('key');
+  const lock = document.getElementById('book-lock');
+  let isDragging = false;
+  let keyMobile = false;
+
+  // Desktop drag
+  key.addEventListener('dragstart', e => {
+    isDragging = true;
+    key.classList.add('dragging');
+    e.dataTransfer.setDragImage(key, 20, 20);
+  });
+  key.addEventListener('dragend', () => {
+    isDragging = false;
+    key.classList.remove('dragging');
+  });
+
+  lock.addEventListener('dragover', e => { e.preventDefault(); lock.classList.add('drop-target'); });
+  lock.addEventListener('dragleave', () => lock.classList.remove('drop-target'));
+  lock.addEventListener('drop', e => {
+    e.preventDefault();
+    lock.classList.remove('drop-target');
+    triggerUnlock();
+  });
+
+  // Mobile tap
+  key.addEventListener('click', () => {
+    keyMobile = !keyMobile;
+    if (keyMobile) {
+      key.querySelector('.key-emoji').style.filter = 'drop-shadow(0 0 15px gold)';
+      document.getElementById('gate-hint').textContent = '✨ now tap the lock ✨';
+    } else {
+      key.querySelector('.key-emoji').style.filter = '';
+      document.getElementById('gate-hint').textContent = '✨ drag the key to the lock ✨';
+    }
+  });
+  lock.addEventListener('click', () => {
+    if (keyMobile) triggerUnlock();
+  });
+
+  // Touch drag
+  let touchStartX, touchStartY;
+  key.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    key.classList.add('dragging');
+  }, { passive: true });
+  key.addEventListener('touchmove', e => {
+    const touch = e.touches[0];
+    key.style.position = 'fixed';
+    key.style.left = (touch.clientX - 25) + 'px';
+    key.style.top = (touch.clientY - 25) + 'px';
+    key.style.zIndex = '999';
+    e.preventDefault();
+    // Check overlap with lock
+    const lockRect = lock.getBoundingClientRect();
+    const tx = touch.clientX, ty = touch.clientY;
+    if (tx >= lockRect.left && tx <= lockRect.right && ty >= lockRect.top && ty <= lockRect.bottom) {
+      lock.classList.add('drop-target');
+    } else {
+      lock.classList.remove('drop-target');
+    }
+  }, { passive: false });
+  key.addEventListener('touchend', e => {
+    const touch = e.changedTouches[0];
+    key.classList.remove('dragging');
+    key.style.position = '';
+    key.style.left = '';
+    key.style.top = '';
+    const lockRect = lock.getBoundingClientRect();
+    if (touch.clientX >= lockRect.left && touch.clientX <= lockRect.right &&
+        touch.clientY >= lockRect.top && touch.clientY <= lockRect.bottom) {
+      triggerUnlock();
+    }
+    lock.classList.remove('drop-target');
+  });
+}
+
+function triggerUnlock() {
+  playClink();
+  const lock = document.getElementById('book-lock');
+  const book = document.getElementById('gate-book');
+  const key = document.getElementById('key');
+  const hint = document.getElementById('gate-hint');
+
+  lock.classList.add('unlocked');
+  lock.textContent = '🔓';
+  hint.textContent = '✨ entering Kaiana\'s World... ✨';
+
+  setTimeout(() => {
+    key.style.opacity = '0';
+    book.classList.add('opening');
+    // Page flip effects
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => {
+        const flip = document.getElementById('page-flip');
+        flip.classList.add('flipping');
+        setTimeout(() => flip.classList.remove('flipping'), 400);
+      }, i * 150);
+    }
+  }, 500);
+
+  setTimeout(() => {
+    document.getElementById('gate').classList.add('fade-out');
+  }, 1500);
+
+  setTimeout(() => {
+    unlockGate(true);
+  }, 2200);
+}
+
+function unlockGate(playSound = true) {
+  sessionStorage.setItem('kaicore_unlocked', '1');
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  if (playSound) playChime();
+  initApp();
+}
+
+// ─── App Init ───────────────────────────────────
+async function initApp() {
+  // Check auth state
+  try {
+    const me = await apiCall('GET', '/api/me');
+    state.isLoggedIn = me.logged_in;
+    state.isKai = me.is_kai;
+    updateTopbar();
+  } catch(e) { /* offline mode */ }
+
+  // Load theme
+  try {
+    const theme = await apiCall('GET', '/api/theme');
+    state.theme = theme;
+    applyTheme(theme);
+  } catch(e) { /* use defaults */ }
+
+  navigate('home');
+  spawnPets();
+  initEasterEggs();
+}
+
+function updateTopbar() {
+  const topbar = document.getElementById('topbar-right');
+  if (state.isKai) {
+    topbar.innerHTML = `<button class="btn btn-sm" onclick="navigate('edit')">✏️ Edit</button>`;
+  } else {
+    topbar.innerHTML = `<button class="btn btn-ghost btn-sm" onclick="navigate('onthisday')">📅</button>`;
+  }
+}
+
+// ─── Home Page ──────────────────────────────────
+async function loadHomePreview() {
+  try {
+    const [threads, profile] = await Promise.all([
+      apiCall('GET', '/api/threads?limit=3'),
+      apiCall('GET', '/api/profile')
+    ]);
+    state.profile = profile;
+
+    document.getElementById('home-mood-display').innerHTML = `<span class="badge">${profile.mood_emoji || '🎀'} mood of the day</span>`;
+    
+    const container = document.getElementById('home-threads-preview');
+    if (!threads.threads || !threads.threads.length) {
+      container.innerHTML = '<div class="empty-state"><span class="empty-emoji">🌸</span><p>No threads yet... check back soon!</p></div>';
+      return;
+    }
+    container.innerHTML = threads.threads.map(t => renderThreadCard(t, true)).join('');
+  } catch(e) {
+    document.getElementById('home-threads-preview').innerHTML = renderOfflineNotice();
+  }
+}
+
+function renderOfflineNotice() {
+  return `<div class="card" style="padding:20px; text-align:center; color:var(--text-muted); font-size:0.85rem;">
+    <div style="font-size:2rem; margin-bottom:8px;">📡</div>
+    Backend not connected yet — update the API URL in index.html<br>
+    <span style="font-size:0.75rem; font-family:var(--font-mono);">const API = 'https://your-backend.onrender.com'</span>
+  </div>`;
+}
+
+// ─── Threads ────────────────────────────────────
+let threadsData = [];
+let currentPage = 1;
+
+async function loadThreads(page = 1) {
+  currentPage = page;
+  const container = document.getElementById('threads-container');
+  container.innerHTML = '<div class="loading">Loading threads...</div>';
+  try {
+    const data = await apiCall('GET', `/api/threads?page=${page}&limit=10`);
+    threadsData = data.threads;
+    if (!threadsData.length) {
+      container.innerHTML = '<div class="empty-state"><span class="empty-emoji">🧵</span><p>No threads yet. Kai\'s thinking...</p></div>';
+      return;
+    }
+    container.innerHTML = threadsData.map(t => renderThreadCard(t)).join('');
+    attachThreadHandlers();
+    renderPagination(data.total, page, 10);
+  } catch(e) {
+    container.innerHTML = renderOfflineNotice();
+  }
+}
+
+function renderThreadCard(thread, compact = false) {
+  const date = new Date(thread.created_at);
+  const timeStr = formatTime(date);
+  const commentCount = thread.comments ? (Array.isArray(thread.comments) ? thread.comments.length : (thread.comments[0]?.count || 0)) : 0;
+
+  return `<div class="card thread-card" id="thread-${thread.id}">
+    <div class="thread-header">
+      <div class="thread-avatar">🌸</div>
+      <div class="thread-meta">
+        <div class="thread-username">@kaiana</div>
+        <div class="thread-time">${timeStr}</div>
+      </div>
+    </div>
+    <div class="thread-content">${escHtml(thread.content)}</div>
+    ${thread.image_url ? `<img class="thread-image" src="${thread.image_url}" alt="thread image" loading="lazy">` : ''}
+    ${thread.video_url ? `<div class="thread-video">${getEmbedHtml(thread.video_url)}</div>` : ''}
+    ${!compact ? `
+    <div class="thread-actions">
+      <div class="thread-action" onclick="toggleComments(${thread.id})">
+        💬 <span id="comment-count-${thread.id}">${commentCount}</span> comments
+      </div>
+    </div>
+    <div id="comments-${thread.id}" style="display:none;" class="comments-section">
+      <div id="comments-list-${thread.id}"></div>
+      <div class="comment-form">
+        <div class="comment-form-inner">
+          <div class="comment-meta-row">
+            <input class="input" id="cname-${thread.id}" placeholder="your name..." style="flex:1;">
+            <input type="color" class="color-dot-picker" id="ccolor-${thread.id}" value="#FF69B4" title="pick your color">
+          </div>
+          <textarea class="input" id="ctext-${thread.id}" rows="2" placeholder="leave a comment..." style="font-size:0.82rem;"></textarea>
+          <button class="btn btn-sm" onclick="postComment(${thread.id})">💬 comment</button>
+        </div>
+      </div>
+    </div>` : ''}
+  </div>`;
+}
+
+function attachThreadHandlers() {}
+
+async function toggleComments(threadId) {
+  const section = document.getElementById(`comments-${threadId}`);
+  const isOpen = section.style.display !== 'none';
+  section.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) {
+    await loadComments(threadId);
+    playBloop();
+  }
+}
+
+async function loadComments(threadId) {
+  const listEl = document.getElementById(`comments-list-${threadId}`);
+  try {
+    const comments = await apiCall('GET', `/api/threads/${threadId}/comments`);
+    const topLevel = comments.filter(c => !c.parent_id);
+    const replies = comments.filter(c => c.parent_id);
+
+    listEl.innerHTML = topLevel.map(c => {
+      const cReplies = replies.filter(r => r.parent_id === c.id);
+      return renderComment(c, threadId) + cReplies.map(r => renderComment(r, threadId, true)).join('');
+    }).join('');
+  } catch(e) {
+    listEl.innerHTML = '<div style="color:var(--text-muted); font-size:0.8rem; padding:10px;">Could not load comments</div>';
+  }
+}
+
+function renderComment(c, threadId, isReply = false) {
+  return `<div class="comment-bubble ${isReply ? 'reply-bubble' : ''} ${c.is_pinned ? 'comment-pinned' : ''}">
+    <div class="comment-dot" style="background:${c.author_color}">${(c.author_name||'?')[0].toUpperCase()}</div>
+    <div class="comment-content">
+      <div class="comment-author" style="color:${c.author_color}">${escHtml(c.author_name)}${c.is_pinned ? ' 📌' : ''}</div>
+      <div class="comment-text">${escHtml(c.content)}</div>
+      <div class="comment-actions">
+        <span class="comment-vote" onclick="voteComment(${c.id},'up',${threadId})">👍 ${c.upvotes}</span>
+        <span class="comment-vote" onclick="voteComment(${c.id},'down',${threadId})">👎 ${c.downvotes}</span>
+        ${!isReply ? `<span class="comment-vote" onclick="showReplyForm(${c.id},${threadId})" style="cursor:pointer;">↩️ reply</span>` : ''}
+        ${state.isKai ? `<span class="comment-vote" onclick="deleteComment(${c.id},${threadId})" style="color:#ef4444;">🗑️</span>
+        <span class="comment-vote" onclick="pinComment(${c.id},${threadId})">📌</span>` : ''}
+      </div>
+      <div id="reply-form-${c.id}" style="display:none; margin-top:8px;">
+        <div style="display:flex; gap:6px;">
+          <input class="input" id="rname-${c.id}" placeholder="name..." style="flex:1; font-size:0.78rem; padding:6px 10px;">
+          <textarea class="input" id="rtext-${c.id}" rows="1" placeholder="reply..." style="flex:2; font-size:0.78rem; padding:6px 10px;"></textarea>
+          <button class="btn btn-xs" onclick="postReply(${c.id},${threadId})">↩️</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function showReplyForm(commentId, threadId) {
+  const form = document.getElementById(`reply-form-${commentId}`);
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+async function postComment(threadId) {
+  const name = document.getElementById(`cname-${threadId}`).value.trim() || 'anonymous';
+  const color = document.getElementById(`ccolor-${threadId}`).value;
+  const content = document.getElementById(`ctext-${threadId}`).value.trim();
+  if (!content) return;
+  try {
+    await apiCall('POST', '/api/comments', { thread_id: threadId, author_name: name, author_color: color, content });
+    document.getElementById(`ctext-${threadId}`).value = '';
+    await loadComments(threadId);
+    // Update count
+    const ct = document.getElementById(`comment-count-${threadId}`);
+    if (ct) ct.textContent = parseInt(ct.textContent) + 1;
+    playPop();
+    toast('comment sent 💬');
+  } catch(e) { toast('Could not post comment'); }
+}
+
+async function postReply(parentId, threadId) {
+  const name = document.getElementById(`rname-${parentId}`).value.trim() || 'anonymous';
+  const content = document.getElementById(`rtext-${parentId}`).value.trim();
+  if (!content) return;
+  try {
+    await apiCall('POST', '/api/comments', { thread_id: threadId, parent_id: parentId, author_name: name, author_color: '#A855F7', content });
+    await loadComments(threadId);
+    playPop();
+  } catch(e) { toast('Could not post reply'); }
+}
+
+async function voteComment(id, type, threadId) {
+  try {
+    await apiCall('POST', `/api/comments/${id}/vote`, { vote_type: type });
+    await loadComments(threadId);
+    playTone(type === 'up' ? 660 : 330, 'sine', 0.1);
+  } catch(e) {}
+}
+
+async function deleteComment(id, threadId) {
+  try {
+    await apiCall('DELETE', `/api/comments/${id}`);
+    await loadComments(threadId);
+    toast('Comment deleted 🗑️');
+  } catch(e) { toast('Could not delete'); }
+}
+
+async function pinComment(id, threadId) {
+  try {
+    await apiCall('PUT', `/api/comments/${id}/pin`);
+    await loadComments(threadId);
+    toast('Comment pinned 📌');
+  } catch(e) {}
+}
+
+function renderPagination(total, page, limit) {
+  const totalPages = Math.ceil(total / limit);
+  if (totalPages <= 1) return;
+  const el = document.getElementById('threads-pagination');
+  let html = '<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">';
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button class="btn btn-sm ${i === page ? '' : 'btn-ghost'}" onclick="loadThreads(${i})">${i}</button>`;
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ─── Vlogs ──────────────────────────────────────
+async function loadVlogs() {
+  const container = document.getElementById('vlogs-container');
+  try {
+    const vlogs = await apiCall('GET', '/api/vlogs');
+    if (!vlogs.length) {
+      container.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><span class="empty-emoji">🎬</span><p>No vlogs yet!</p></div>';
+      return;
+    }
+    container.innerHTML = vlogs.map(v => `
+      <div class="card vlog-card" onclick="openVlog(${v.id},'${escHtml(v.title)}','${v.video_url}')">
+        <div class="vlog-thumb">
+          ${v.thumbnail_url ? `<img src="${v.thumbnail_url}" alt="${escHtml(v.title)}">` : '🎬'}
+          <div class="vlog-play">▶</div>
+        </div>
+        <div class="vlog-info">
+          <div class="vlog-title">${escHtml(v.title)}</div>
+          <div class="vlog-date">${formatTime(new Date(v.created_at))}${v.duration ? ' · ' + v.duration : ''}</div>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    container.innerHTML = renderOfflineNotice();
+  }
+}
+
+function openVlog(id, title, url) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-video-container').innerHTML = getEmbedHtml(url, true);
+  loadVlogComments(id);
+  document.getElementById('video-modal').style.display = 'flex';
+  playBloop();
+}
+
+async function loadVlogComments(vlogId) {
+  const el = document.getElementById('modal-vlog-comments');
+  try {
+    const comments = await apiCall('GET', `/api/vlogs/${vlogId}/comments`);
+    el.innerHTML = `
+      <div style="font-weight:800; color:var(--primary); margin-bottom:10px;">💬 Comments</div>
+      ${comments.map(c => `<div class="comment-bubble"><div class="comment-dot" style="background:${c.author_color}">${(c.author_name||'?')[0].toUpperCase()}</div><div class="comment-content"><div class="comment-author" style="color:${c.author_color}">${escHtml(c.author_name)}</div><div class="comment-text">${escHtml(c.content)}</div></div></div>`).join('')}
+      <div class="comment-form" style="margin-top:12px;">
+        <div class="comment-form-inner">
+          <input class="input" id="vc-name-${vlogId}" placeholder="your name...">
+          <textarea class="input" id="vc-text-${vlogId}" rows="2" placeholder="leave a comment..."></textarea>
+          <button class="btn btn-sm" onclick="postVlogComment(${vlogId})">💬 comment</button>
+        </div>
+      </div>
+    `;
+  } catch(e) {}
+}
+
+async function postVlogComment(vlogId) {
+  const name = document.getElementById(`vc-name-${vlogId}`).value.trim() || 'anonymous';
+  const content = document.getElementById(`vc-text-${vlogId}`).value.trim();
+  if (!content) return;
+  try {
+    await apiCall('POST', '/api/vlog-comments', { vlog_id: vlogId, author_name: name, author_color: '#FF69B4', content });
+    await loadVlogComments(vlogId);
+    playPop();
+  } catch(e) { toast('Could not post comment'); }
+}
+
+function closeVideoModal(e) {
+  if (!e || e.target === document.getElementById('video-modal') || e.type === 'click' && !e.target.closest) {
+    document.getElementById('video-modal').style.display = 'none';
+    document.getElementById('modal-video-container').innerHTML = '';
+  }
+}
+
+// ─── About ──────────────────────────────────────
+async function loadAbout() {
+  try {
+    const [profile, facts] = await Promise.all([
+      apiCall('GET', '/api/profile'),
+      apiCall('GET', '/api/funfacts')
+    ]);
+    state.profile = profile;
+
+    document.getElementById('profile-name').textContent = profile.display_name || 'Kaiana';
+    document.getElementById('profile-pronouns').textContent = profile.pronouns || 'she/her';
+    document.getElementById('mood-badge-el').textContent = profile.mood_emoji || '🎀';
+
+    if (profile.profile_pic_url) {
+      document.getElementById('profile-pic-el').innerHTML = `<img src="${profile.profile_pic_url}" alt="profile">`;
+    }
+
+    const details = [];
+    if (profile.location) details.push(`🌍 ${profile.location}`);
+    if (profile.zodiac) details.push(`✨ ${profile.zodiac}`);
+    if (profile.member_since) details.push(`📅 since ${new Date(profile.member_since).getFullYear()}`);
+    document.getElementById('profile-details').innerHTML = details.map(d => `<span style="font-size:0.78rem; color:var(--text-muted);">${d}</span>`).join('');
+
+    if (profile.bio) document.getElementById('about-bio').textContent = profile.bio;
+
+    document.getElementById('facts-grid').innerHTML = facts.map(f => `
+      <div class="fact-item">
+        <div class="fact-label">${escHtml(f.label || '')}</div>
+        <div class="fact-value">${escHtml(f.fact_text || '...')}</div>
+      </div>
+    `).join('');
+
+    if (profile.spotify_url) {
+      document.getElementById('spotify-section').innerHTML = `
+        <div style="font-family:var(--font-display); font-size:1rem; color:var(--primary); margin-bottom:10px;">🎧 Kai's Current Rotation</div>
+        <a href="${profile.spotify_url}" target="_blank" class="link-pill link-pill-spotify" style="text-decoration:none; display:inline-flex; max-width:200px;">
+          <span class="link-icon">🎧</span> Open Spotify
+        </a>
+      `;
+    }
+  } catch(e) {
+    document.getElementById('about-card').innerHTML = renderOfflineNotice();
+  }
+}
+
+// ─── Core Links ─────────────────────────────────
+async function loadLinks() {
+  try {
+    const profile = await apiCall('GET', '/api/profile');
+    const container = document.getElementById('links-container');
+    container.innerHTML = `
+      ${profile.instagram_url ? `<a href="${profile.instagram_url}" target="_blank" class="link-pill link-pill-instagram"><span class="link-icon">📷</span><div><div>Instagram</div><div style="font-size:0.75rem; opacity:0.85;">@kaicore</div></div></a>` : ''}
+      ${profile.tiktok_url ? `<a href="${profile.tiktok_url}" target="_blank" class="link-pill link-pill-tiktok"><span class="link-icon">🎵</span><div><div>TikTok</div><div style="font-size:0.75rem; opacity:0.85;">@kaicore</div></div></a>` : ''}
+      ${profile.spotify_url ? `<a href="${profile.spotify_url}" target="_blank" class="link-pill link-pill-spotify"><span class="link-icon">🎧</span><div><div>Spotify</div><div style="font-size:0.75rem; opacity:0.85;">Kai's Current Jam</div></div></a>` : ''}
+      ${!profile.instagram_url && !profile.tiktok_url && !profile.spotify_url ? '<div class="empty-state"><span class="empty-emoji">🔗</span><p>Links coming soon!</p></div>' : ''}
+    `;
+  } catch(e) {
+    document.getElementById('links-container').innerHTML = renderOfflineNotice();
+  }
+}
+
+// ─── On This Day ────────────────────────────────
+async function loadOnThisDay() {
+  const container = document.getElementById('onthisday-container');
+  try {
+    const threads = await apiCall('GET', '/api/onthisday');
+    if (!threads.length) {
+      container.innerHTML = `<div class="empty-state"><span class="empty-emoji">📅</span><p>Nothing happened on this day yet...<br>go make some memories, Kai!</p></div>`;
+      return;
+    }
+    const today = new Date();
+    container.innerHTML = `
+      <div style="font-family:var(--font-display); font-size:1.3rem; color:var(--primary); margin-bottom:20px; text-align:center;">
+        📅 ${today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} through the years
+      </div>
+    ` + threads.map(t => {
+      const d = new Date(t.created_at);
+      return `<div class="card flashback-card">
+        <div class="flashback-year">${d.getFullYear()}</div>
+        <div style="padding-top:8px;">
+          <div class="thread-header">
+            <div class="thread-avatar">🌸</div>
+            <div class="thread-meta">
+              <div class="thread-username">@kaiana</div>
+              <div class="thread-time">${formatTime(d)}</div>
+            </div>
+          </div>
+          <div class="thread-content">${escHtml(t.content)}</div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button class="btn btn-sm btn-ghost" onclick="toast('🔗 link copied!'); navigator.clipboard.writeText(window.location.href)">📤 share</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    container.innerHTML = renderOfflineNotice();
+  }
+}
+
+// ─── Auth ────────────────────────────────────────
+async function doLogin() {
+  const user = document.getElementById('login-user').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  if (!user || !pass) return;
+  try {
+    await apiCall('POST', '/api/login', { username: user, password: pass });
+    state.isLoggedIn = true;
+    state.isKai = true;
+    updateTopbar();
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('post-login-buttons').style.display = 'flex';
+    document.getElementById('login-error').style.display = 'none';
+    playChime();
+  } catch(e) {
+    document.getElementById('login-error').textContent = 'wrong credentials 🐱';
+    document.getElementById('login-error').style.display = 'block';
+    playTone(200, 'sawtooth', 0.2);
+  }
+}
+
+async function doLogout() {
+  try { await apiCall('POST', '/api/logout'); } catch(e) {}
+  state.isLoggedIn = false;
+  state.isKai = false;
+  updateTopbar();
+  document.getElementById('post-login-buttons').style.display = 'none';
+  document.getElementById('login-form').style.display = 'flex';
+  navigate('home');
+  toast('logged out 👋');
+}
+
+function checkLoginState() {
+  if (state.isKai) {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('post-login-buttons').style.display = 'flex';
+  }
+}
+
+// ─── Edit View ──────────────────────────────────
+async function loadEditView() {
+  if (!state.isKai) {
+    document.getElementById('edit-locked').style.display = 'block';
+    document.getElementById('edit-panel').style.display = 'none';
+    return;
+  }
+  document.getElementById('edit-locked').style.display = 'none';
+  document.getElementById('edit-panel').style.display = 'block';
+
+  loadAdminThreads();
+  loadProfileEditor();
+  loadFunFactsEditor();
+}
+
+async function loadAdminThreads() {
+  const list = document.getElementById('admin-threads-list');
+  try {
+    const threads = await apiCall('GET', '/api/threads/all');
+    if (!threads.length) { list.innerHTML = '<div style="color:var(--text-muted); font-size:0.82rem;">No threads yet</div>'; return; }
+    list.innerHTML = threads.map(t => `
+      <div class="admin-thread-item">
+        <div class="admin-thread-text">
+          ${t.is_hidden ? '<span style="color:#ef4444; font-size:0.7rem;">[HIDDEN] </span>' : ''}
+          ${escHtml(t.content.substring(0, 80))}${t.content.length > 80 ? '...' : ''}
+          <div style="font-size:0.7rem; color:var(--text-muted); margin-top:3px;">${formatTime(new Date(t.created_at))}</div>
+        </div>
+        <div class="admin-thread-actions">
+          <button class="btn btn-xs btn-ghost" onclick="toggleThreadHide(${t.id},${!t.is_hidden})">${t.is_hidden ? '👁️' : '🙈'}</button>
+          <button class="btn btn-xs btn-danger" onclick="deleteThread(${t.id})">🗑️</button>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) { list.innerHTML = '<div style="color:#ef4444; font-size:0.82rem;">Could not load threads</div>'; }
+}
+
+async function postThread() {
+  const content = document.getElementById('new-thread-content').value.trim();
+  if (!content) { toast('Write something first! 🧵'); return; }
+  try {
+    await apiCall('POST', '/api/threads', {
+      content,
+      image_url: document.getElementById('new-thread-image').value.trim() || null,
+      video_url: document.getElementById('new-thread-video').value.trim() || null
+    });
+    document.getElementById('new-thread-content').value = '';
+    document.getElementById('new-thread-image').value = '';
+    document.getElementById('new-thread-video').value = '';
+    await loadAdminThreads();
+    toast('Thread posted! 🧵');
+    playChime();
+  } catch(e) { toast('Could not post thread'); }
+}
+
+async function postVlog() {
+  const title = document.getElementById('new-vlog-title').value.trim();
+  const url = document.getElementById('new-vlog-url').value.trim();
+  if (!title || !url) { toast('Need title and URL'); return; }
+  try {
+    await apiCall('POST', '/api/vlogs', {
+      title,
+      description: document.getElementById('new-vlog-desc').value.trim(),
+      video_url: url,
+      thumbnail_url: document.getElementById('new-vlog-thumb').value.trim() || null
+    });
+    toast('Vlog added 🎬');
+    playChime();
+  } catch(e) { toast('Could not add vlog'); }
+}
+
+async function deleteThread(id) {
+  if (!confirm('Delete this thread?')) return;
+  try {
+    await apiCall('DELETE', `/api/threads/${id}`);
+    await loadAdminThreads();
+    toast('Thread deleted 🗑️');
+  } catch(e) { toast('Could not delete'); }
+}
+
+async function toggleThreadHide(id, hide) {
+  try {
+    await apiCall('PUT', `/api/threads/${id}`, { is_hidden: hide });
+    await loadAdminThreads();
+    toast(hide ? 'Thread hidden 🙈' : 'Thread visible 👁️');
+  } catch(e) {}
+}
+
+async function loadProfileEditor() {
+  try {
+    const p = await apiCall('GET', '/api/profile');
+    document.getElementById('edit-name').value = p.display_name || '';
+    document.getElementById('edit-pronouns').value = p.pronouns || '';
+    document.getElementById('edit-location').value = p.location || '';
+    document.getElementById('edit-zodiac').value = p.zodiac || '';
+    document.getElementById('edit-bio').value = p.bio || '';
+    document.getElementById('edit-instagram').value = p.instagram_url || '';
+    document.getElementById('edit-tiktok').value = p.tiktok_url || '';
+    document.getElementById('edit-spotify').value = p.spotify_url || '';
+  } catch(e) {}
+}
+
+async function saveProfile() {
+  try {
+    await apiCall('PUT', '/api/profile', {
+      display_name: document.getElementById('edit-name').value,
+      pronouns: document.getElementById('edit-pronouns').value,
+      location: document.getElementById('edit-location').value,
+      zodiac: document.getElementById('edit-zodiac').value,
+      bio: document.getElementById('edit-bio').value,
+      instagram_url: document.getElementById('edit-instagram').value,
+      tiktok_url: document.getElementById('edit-tiktok').value,
+      spotify_url: document.getElementById('edit-spotify').value
+    });
+    toast('Profile saved 💾');
+    playChime();
+  } catch(e) { toast('Could not save profile'); }
+}
+
+async function setMood(emoji) {
+  try {
+    await apiCall('PUT', '/api/profile', { mood_emoji: emoji });
+    toast(`Mood set to ${emoji}`);
+    playBloop();
+  } catch(e) {}
+}
+
+async function loadFunFactsEditor() {
+  try {
+    const facts = await apiCall('GET', '/api/funfacts');
+    const editor = document.getElementById('fun-facts-editor');
+    editor.innerHTML = facts.map(f => `
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input class="input" value="${escHtml(f.label || '')}" id="fact-label-${f.slot_number}" placeholder="Label" style="flex:0.7; font-size:0.8rem;">
+        <input class="input" value="${escHtml(f.fact_text || '')}" id="fact-val-${f.slot_number}" placeholder="Fact" style="flex:1; font-size:0.8rem;">
+      </div>
+    `).join('') + `<button class="btn" onclick="saveFunFacts(${facts.length})">💾 Save Facts</button>`;
+  } catch(e) {}
+}
+
+async function saveFunFacts(count) {
+  const facts = [];
+  for (let i = 1; i <= count; i++) {
+    const lbl = document.getElementById(`fact-label-${i}`);
+    const val = document.getElementById(`fact-val-${i}`);
+    if (lbl && val) facts.push({ slot_number: i, label: lbl.value, fact_text: val.value });
+  }
+  try {
+    await apiCall('PUT', '/api/funfacts', { facts });
+    toast('Fun facts saved ✨');
+    playChime();
+  } catch(e) { toast('Could not save'); }
+}
+
+// ─── Journal ────────────────────────────────────
+async function checkJournalPw() {
+  const pw = document.getElementById('journal-pw-input').value;
+  if (!pw) return;
+  try {
+    if (!state.isKai) { toast('Journal is Kai-only 🔐'); return; }
+    await apiCall('POST', '/api/journal/auth', { journal_password: pw });
+    state.journalAuthed = true;
+    state.journalPassword = pw;
+    document.getElementById('journal-locked').style.display = 'none';
+    document.getElementById('journal-unlocked').style.display = 'block';
+    playChime();
+    loadJournalEntries();
+  } catch(e) {
+    document.getElementById('journal-pw-error').style.display = 'block';
+    setTimeout(() => document.getElementById('journal-pw-error').style.display = 'none', 2000);
+    playTone(200, 'sawtooth', 0.2);
+  }
+}
+
+function initJournalPage() {
+  if (state.journalAuthed) {
+    document.getElementById('journal-locked').style.display = 'none';
+    document.getElementById('journal-unlocked').style.display = 'block';
+    loadJournalEntries();
+  }
+}
+
+async function loadJournalEntries() {
+  const list = document.getElementById('journal-entries-list');
+  try {
+    const entries = await apiCall('GET', `/api/journal?journal_password=${encodeURIComponent(state.journalPassword)}`);
+    if (!entries.length) {
+      list.innerHTML = '<div class="empty-state"><span class="empty-emoji">📖</span><p>Start writing, Kai</p></div>';
+      return;
+    }
+    list.innerHTML = entries.map(e => `
+      <div class="card journal-entry">
+        <div class="journal-entry-header">
+          <div>
+            <div class="journal-date">${e.date}</div>
+            <div class="journal-title">${escHtml(e.title || 'untitled')}</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span class="journal-mood">${e.mood || ''}</span>
+            <button class="btn btn-xs btn-danger" onclick="deleteJournalEntry(${e.id})">🗑️</button>
+          </div>
+        </div>
+        <div class="journal-preview">${escHtml((e.content || '').substring(0, 120))}${(e.content || '').length > 120 ? '...' : ''}</div>
+      </div>
+    `).join('');
+  } catch(e) { list.innerHTML = '<div style="color:#ef4444; font-size:0.82rem; padding:10px;">Could not load entries</div>'; }
+}
+
+function setJournalMood(emoji) {
+  state.journalMood = emoji;
+  document.getElementById('j-mood-display').textContent = `mood: ${emoji}`;
+}
+
+async function saveJournalEntry() {
+  const content = document.getElementById('j-content').value.trim();
+  if (!content) { toast('Write something first!'); return; }
+  try {
+    await apiCall('POST', '/api/journal', {
+      date: document.getElementById('j-date').value || new Date().toISOString().split('T')[0],
+      mood: state.journalMood || null,
+      title: document.getElementById('j-title').value.trim() || null,
+      content,
+      journal_password: state.journalPassword
+    });
+    document.getElementById('j-content').value = '';
+    document.getElementById('j-title').value = '';
+    state.journalMood = '';
+    document.getElementById('j-mood-display').textContent = 'mood: none selected';
+    document.getElementById('journal-new-entry-section').style.display = 'none';
+    await loadJournalEntries();
+    toast('Entry saved 📖');
+    playChime();
+  } catch(e) { toast('Could not save entry'); }
+}
+
+async function deleteJournalEntry(id) {
+  if (!confirm('Delete this entry?')) return;
+  try {
+    await apiCall('DELETE', `/api/journal/${id}`);
+    await loadJournalEntries();
+    toast('Entry deleted 🗑️');
+  } catch(e) {}
+}
+
+// ─── Petscape Page ──────────────────────────────
+const BUILTIN_PETS = [
+  { id: 'b1', name: 'Black Cat', emoji: '🐈‍⬛', personality: 'Mysterious', sound: 'cat', move: 'ground' },
+  { id: 'b2', name: 'Orange Cat', emoji: '🐈', personality: 'Chaotic', sound: 'cat', move: 'ground' },
+  { id: 'b3', name: 'Pink Cat', emoji: '🌸🐱', personality: 'Sleepy', sound: 'cat', move: 'ground' },
+  { id: 'b4', name: 'Blue Bird', emoji: '🐦', personality: 'Musical', sound: 'bird', move: 'air' },
+  { id: 'b5', name: 'Red Bird', emoji: '🦜', personality: 'Sassy', sound: 'bird', move: 'air' },
+  { id: 'b6', name: 'Bat', emoji: '🦇', personality: 'Nocturnal', sound: 'cat', move: 'air' },
+];
+
+function renderPetscapePage() {
+  const grid = document.getElementById('petscape-grid');
+  grid.innerHTML = BUILTIN_PETS.map(p => `
+    <div class="card pet-vibe-card" onclick="petscapeClick('${p.sound}')">
+      <span class="pet-sprite-large">${p.emoji}</span>
+      <div class="pet-name">${p.name}</div>
+      <div class="pet-personality">${p.personality}</div>
+    </div>
+  `).join('');
+}
+
+function petscapeClick(sound) {
+  if (sound === 'cat') playCat();
+  else playBird();
+  playBloop();
+}
+
+// ─── Floating Pets ──────────────────────────────
+const floatingPets = [];
+let petInterval = null;
+
+function spawnPets() {
+  if (petInterval) clearInterval(petInterval);
+  petInterval = setInterval(maybeSpawnPet, 3000);
+  // Spawn a few immediately
+  for (let i = 0; i < 3; i++) {
+    setTimeout(maybeSpawnPet, i * 1000);
+  }
+}
+
+function maybeSpawnPet() {
+  if (!state.petsOn) return;
+  const freq = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--pet-freq')) || 50;
+  if (Math.random() * 100 > freq) return;
+  if (floatingPets.length >= 8) return;
+  spawnSinglePet();
+}
+
+function spawnSinglePet() {
+  const pets = ['🐈‍⬛','🐈','🐦','🦜','🦋','🐾'];
+  const emoji = pets[Math.floor(Math.random() * pets.length)];
+  const isBird = emoji === '🐦' || emoji === '🦜' || emoji === '🦋';
+  
+  const el = document.createElement('div');
+  el.className = 'pixel-pet';
+  el.textContent = emoji;
+  el.style.fontSize = (20 + Math.floor(Math.random() * 12)) + 'px';
+  
+  const startX = isBird ? -50 : Math.random() * (window.innerWidth - 60);
+  const startY = isBird ? (Math.random() * window.innerHeight * 0.5) : (window.innerHeight * 0.6 + Math.random() * window.innerHeight * 0.3);
+  
+  el.style.left = startX + 'px';
+  el.style.top = startY + 'px';
+  
+  el.addEventListener('click', () => {
+    if (isBird) playBird(); else playCat();
+    el.style.transform = 'scale(1.5) rotate(20deg)';
+    setTimeout(() => el.style.transform = '', 300);
+    playPop();
+  });
+
+  document.body.appendChild(el);
+  floatingPets.push(el);
+
+  if (isBird) {
+    animateBird(el, startX, startY);
+  } else {
+    animateCat(el, startX, startY);
+  }
+
+  setTimeout(() => {
+    el.remove();
+    const idx = floatingPets.indexOf(el);
+    if (idx > -1) floatingPets.splice(idx, 1);
+  }, 15000 + Math.random() * 10000);
+}
+
+function animateCat(el, x, y) {
+  let curX = x, curY = y;
+  let dir = Math.random() > 0.5 ? 1 : -1;
+  let state_ = 'walk';
+  let stateTimer = 0;
+
+  const step = () => {
+    if (!document.body.contains(el)) return;
+    stateTimer++;
+    
+    if (stateTimer > 60 + Math.random() * 80) {
+      state_ = Math.random() > 0.6 ? 'sit' : 'walk';
+      stateTimer = 0;
+      if (Math.random() > 0.5) dir *= -1;
+    }
+
+    if (state_ === 'walk') {
+      curX += dir * 0.7;
+      if (curX < 0 || curX > window.innerWidth - 40) { dir *= -1; curX = Math.max(0, Math.min(window.innerWidth - 40, curX)); }
+    }
+
+    el.style.left = curX + 'px';
+    el.style.top = curY + 'px';
+    el.style.transform = `scaleX(${dir > 0 ? 1 : -1})`;
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+function animateBird(el, x, y) {
+  let curX = x, curY = y;
+  const speed = 1.2 + Math.random() * 0.8;
+  let angle = 0;
+
+  const step = () => {
+    if (!document.body.contains(el)) return;
+    curX += speed;
+    angle += 0.04;
+    curY = y + Math.sin(angle) * 30;
+    el.style.left = curX + 'px';
+    el.style.top = curY + 'px';
+    if (curX < window.innerWidth + 60) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+document.getElementById('pet-toggle').addEventListener('click', () => {
+  state.petsOn = !state.petsOn;
+  document.getElementById('pet-toggle').textContent = `🐾 PETS ${state.petsOn ? 'ON' : 'OFF'}`;
+  if (!state.petsOn) {
+    floatingPets.forEach(p => p.remove());
+    floatingPets.length = 0;
+  } else {
+    spawnPets();
+  }
+  playBloop();
+});
+
+document.getElementById('mute-btn').addEventListener('click', () => {
+  state.muted = !state.muted;
+  document.getElementById('mute-btn').textContent = state.muted ? '🔇' : '🔊';
+});
+
+// ─── Pet Creator ────────────────────────────────
+function initPetCreator() {
+  if (!state.isKai) {
+    document.getElementById('pet-creator-locked').style.display = 'block';
+    document.getElementById('pet-creator-ui').style.display = 'none';
+    return;
+  }
+
+  const grid = document.getElementById('pet-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 32 * 32; i++) {
+    const px = document.createElement('div');
+    px.className = 'pet-pixel';
+    px.dataset.idx = i;
+    px.addEventListener('mousedown', () => { state.isDrawing = true; paintPixel(i); });
+    px.addEventListener('mousemove', () => { if (state.isDrawing) paintPixel(i); });
+    grid.appendChild(px);
+  }
+  document.addEventListener('mouseup', () => state.isDrawing = false);
+
+  // Color palette
+  const palette = ['#000000','#FFFFFF','#FF69B4','#A855F7','#DC2626','#EAB308','#22c55e','#00BFFF','#FF8C00','#8B4513','#C0C0C0','#FFD700','#FF6B6B','#4ECDC4','#45B7D1','#96CEB4'];
+  const palEl = document.getElementById('pet-color-palette');
+  palEl.innerHTML = palette.map(c => `<div class="color-swatch ${c === state.petColor ? 'active' : ''}" style="background:${c};" onclick="selectPetColor('${c}')"></div>`).join('');
+  document.getElementById('custom-color').addEventListener('input', e => selectPetColor(e.target.value));
+}
+
+function paintPixel(idx) {
+  const tool = state.petTool;
+  if (tool === 'eraser') {
+    state.petGridData[idx] = '';
+  } else if (tool === 'pencil') {
+    state.petGridData[idx] = state.petColor;
+  } else if (tool === 'fill') {
+    const target = state.petGridData[idx];
+    floodFill(idx, target, state.petColor);
+  }
+  updatePetGrid();
+}
+
+function floodFill(idx, target, replacement) {
+  if (target === replacement) return;
+  const stack = [idx];
+  const w = 32;
+  while (stack.length) {
+    const i = stack.pop();
+    if (i < 0 || i >= 32*32 || state.petGridData[i] !== target) continue;
+    state.petGridData[i] = replacement;
+    const row = Math.floor(i / w), col = i % w;
+    if (col > 0) stack.push(i - 1);
+    if (col < w - 1) stack.push(i + 1);
+    if (row > 0) stack.push(i - w);
+    if (row < w - 1) stack.push(i + w);
+  }
+}
+
+function updatePetGrid() {
+  const pixels = document.querySelectorAll('.pet-pixel');
+  pixels.forEach((px, i) => {
+    px.style.background = state.petGridData[i] || 'transparent';
+  });
+}
+
+function selectPetColor(c) {
+  state.petColor = c;
+  document.querySelectorAll('.color-swatch').forEach(s => {
+    s.classList.toggle('active', s.style.backgroundColor === hexToRgb(c));
+  });
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+function setTool(t) {
+  state.petTool = t;
+  ['pencil','fill','eraser'].forEach(id => {
+    const btn = document.getElementById('tool-' + id);
+    if (btn) btn.className = 'btn btn-sm ' + (id === t ? '' : 'btn-ghost');
+  });
+}
+
+function clearPetGrid() {
+  state.petGridData = new Array(32*32).fill('');
+  updatePetGrid();
+}
+
+async function savePet() {
+  const name = document.getElementById('new-pet-name').value.trim();
+  if (!name) { toast('Name your pet first!'); return; }
+  try {
+    await apiCall('POST', '/api/pets', {
+      name,
+      pixel_data: { pixels: state.petGridData },
+      behavior_type: document.getElementById('new-pet-type').value,
+      movement: document.getElementById('new-pet-movement').value,
+      personality: document.getElementById('new-pet-personality').value
+    });
+    toast(`${name} saved! 🐾`);
+    playChime();
+  } catch(e) { toast('Could not save pet: ' + e.message); }
+}
+
+// ─── Easter Eggs ────────────────────────────────
+let konamiBuffer = [];
+let typedBuffer = '';
+
+function initEasterEggs() {
+  let logoClicks = 0;
+  document.getElementById('logo-click').addEventListener('click', () => {
+    logoClicks++;
+    if (logoClicks >= 5) {
+      logoClicks = 0;
+      triggerStampede();
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    typedBuffer += e.key;
+    typedBuffer = typedBuffer.slice(-12);
+    if (typedBuffer.includes('gloss')) triggerGlossFlash();
+    if (typedBuffer.includes('erockiak')) triggerRainbowMode();
+  });
+
+  // 3:33 AM check
+  const now = new Date();
+  if (now.getHours() === 3 && now.getMinutes() === 33) {
+    applyColor('#DC2626', '#111111');
+    toast('🦇 it\'s 3:33... something stirs in the dark');
+    spawnSinglePet(); // force bat
+  }
+}
+
+function triggerStampede() {
+  toast('🐾 STAMPEDE!!!');
+  const emojis = ['🐈‍⬛','🐈','🐦','🦜','🦋','🦇','🐾'];
+  for (let i = 0; i < 15; i++) {
+    const el = document.createElement('div');
+    el.className = 'stampede-pet';
+    el.textContent = emojis[i % emojis.length];
+    el.style.top = (Math.random() * 80) + 'vh';
+    el.style.left = '-60px';
+    el.style.animationDelay = (i * 0.12) + 's';
+    el.style.fontSize = (20 + Math.random() * 20) + 'px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+  }
+  playChime();
+}
+
+function triggerGlossFlash() {
+  document.body.style.filter = 'brightness(2) saturate(2)';
+  setTimeout(() => document.body.style.filter = '', 300);
+  toast('✨ gloss activated');
+  typedBuffer = '';
+}
+
+function triggerRainbowMode() {
+  document.body.style.animation = 'rainbow-gloss 1s linear infinite';
+  toast('🌈 rainbow gloss mode!!');
+  setTimeout(() => document.body.style.animation = '', 5000);
+  typedBuffer = '';
+  playChime();
+}
+
+// ─── Helpers ────────────────────────────────────
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatTime(date) {
+  const now = new Date();
+  const diff = (now - date) / 1000;
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+  if (diff < 604800) return Math.floor(diff/86400) + 'd ago';
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function getEmbedHtml(url, large = false) {
+  if (!url) return '';
+  const h = large ? 360 : 220;
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  if (ytMatch) return `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}" height="${h}" style="width:100%; border:none; border-radius:12px;" allowfullscreen></iframe>`;
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) return `<iframe src="https://player.vimeo.com/video/${vimeoMatch[1]}" height="${h}" style="width:100%; border:none; border-radius:12px;" allowfullscreen></iframe>`;
+  // TikTok
+  if (url.includes('tiktok.com')) return `<blockquote class="tiktok-embed" cite="${url}" style="font-size:0.8rem;"><a href="${url}">View on TikTok</a></blockquote>`;
+  // Direct video
+  if (url.match(/\.(mp4|webm|ogg)$/i)) return `<video src="${url}" controls style="width:100%; border-radius:12px; height:${h}px;"></video>`;
+  return `<a href="${url}" target="_blank" class="btn btn-ghost btn-sm">🎬 Watch Video</a>`;
+}
+
+// ─── Init ────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  initGate();
+
+  // Pet creator init when navigating there
+  const origNavigate = navigate;
+  window.navigate = function(page) {
+    origNavigate(page);
+    if (page === 'petcreator') setTimeout(initPetCreator, 50);
+  };
+});
+</script>
+</body>
+</html>
