@@ -187,23 +187,23 @@ html, body { width:100%; height:100%; overflow:hidden; font-family:'Raleway',san
   50%{ opacity:1; }
 }
 
-/* KEY – positioned below the book, relative to the gate (viewport) */
+/* KEY – positioned to the right of the book */
 #key-wrapper {
   position: absolute;
-  top: calc(50% + 230px);   /* 50% of gate height + half book height (220px) + 10px gap */
-  left: 50%;
-  transform: translateX(-50%);
+  right: -80px;          /* sits to the right of the book scene */
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 20;
   cursor: grab;
   user-select: none;
 }
 
-/* DRAG HINT – below the key */
+/* DRAG HINT – below the key, still to the right */
 .drag-hint {
   position: absolute;
-  top: calc(50% + 290px);   /* a bit further down */
-  left: 50%;
-  transform: translateX(-50%);
+  right: -100px;
+  top: calc(50% + 50px);
+  transform: translateX(0);
   font-family: 'Cinzel Decorative', serif;
   font-size: 11px;
   letter-spacing: 3px;
@@ -212,6 +212,12 @@ html, body { width:100%; height:100%; overflow:hidden; font-family:'Raleway',san
   white-space: nowrap;
   animation: hint-pulse 2s ease-in-out infinite;
   pointer-events: none;
+}
+
+/* Adjust hint-pulse to not rely on translateX(-50%) */
+@keyframes hint-pulse {
+  0%,100%{ opacity:0.6; transform: translateY(0); }
+  50%{ opacity:1; transform: translateY(-3px); }
 }
 
 /* Inner pages (seen when cover opens) */
